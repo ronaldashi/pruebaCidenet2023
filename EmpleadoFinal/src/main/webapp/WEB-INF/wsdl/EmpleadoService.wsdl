@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<definitions targetNamespace="http://com.pe.apps/ws" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://com.pe.apps/ws" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:sch="http://com.pruebacidenet.danielpineros" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/">
+  <types>
+    <xsd:schema>
+      <xsd:import schemaLocation="Empleado.xsd" namespace="http://com.pruebacidenet.danielpineros"/>
+    </xsd:schema>
+  </types>
+  <message name="empleadoRequestMessage">
+    <part name="empleadoRequest" element="sch:empleadoRequestElement"/>
+  </message>
+  <message name="empleadoResponseMessage">
+    <part name="empleadoResponse" element="sch:empleadoResponseElement"/>
+  </message>
+  <message name="empleadoExceptionMessage">
+    <part name="empleadoException" element="sch:empleadoExceptionElement"/>
+  </message>
+  <portType name="EmpleadoPT">
+    <operation name="empleado">
+      <input message="tns:empleadoRequestMessage"/>
+      <output message="tns:empleadoResponseMessage"/>
+      <fault name="empleadoFault" message="tns:empleadoExceptionMessage"/>
+    </operation>
+  </portType>
+  <binding name="EmpleadoSOAP11Binding" type="tns:EmpleadoPT">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="empleado">
+      <soap:operation style="document" soapAction="http://com.pe.apps/ws/empleado"/>
+      <input>
+        <soap:body use="literal" parts="empleadoRequest"/>
+      </input>
+      <output>
+        <soap:body use="literal" parts="empleadoResponse"/>
+      </output>
+      <fault name="empleadoFault">
+        <soap:fault name="empleadoFault" use="literal"/>
+      </fault>
+    </operation>
+  </binding>
+  <service name="EmpleadoServices">
+    <port name="EmpleadoPort" binding="tns:EmpleadoSOAP11Binding">
+      <soap:address location="http://localhost:7101/WS_Empleado/EmpleadoPTImpl?WSDL" />
+    </port>
+  </service>
+</definitions>

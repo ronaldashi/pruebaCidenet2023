@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<definitions targetNamespace="http://com.pruebacidenet.danielpineros/ws" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://com.pruebacidenet.danielpineros/ws" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:sch="http://com.pruebacidenet.danielpineros/esquema" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/">
+  <types>
+    <xsd:schema>
+      <xsd:import schemaLocation="Empleado.xsd" namespace="http://com.pruebacidenet.danielpineros/esquema"/>
+    </xsd:schema>
+  </types>
+  <message name="EmpleadoRequestMessage">
+    <part name="EmpleadoRequest" element="sch:EmpleadoRequestElement"/>
+  </message>
+  <message name="EmpleadoResponseMessage">
+    <part name="EmpleadoResponse" element="sch:EmpleadoResponseElement"/>
+  </message>
+  <message name="EmpleadoExceptionMessage">
+    <part name="EmpleadoException" element="sch:EmpleadoExceptionElement"/>
+  </message>
+  <portType name="EmpleadoPT">
+    <operation name="Empleado">
+      <input message="tns:EmpleadoRequestMessage"/>
+      <output message="tns:EmpleadoResponseMessage"/>
+      <fault name="EmpleadoFault" message="tns:EmpleadoExceptionMessage"/>
+    </operation>
+  </portType>
+  <binding name="EmpleadoSOAP11Binding" type="tns:EmpleadoPT">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="Empleado">
+      <soap:operation style="document" soapAction="http://com.pruebacidenet.danielpineros/ws/Empleado"/>
+      <input>
+        <soap:body use="literal" parts="EmpleadoRequest"/>
+      </input>
+      <output>
+        <soap:body use="literal" parts="EmpleadoResponse"/>
+      </output>
+      <fault name="EmpleadoFault">
+        <soap:fault name="EmpleadoFault" use="literal"/>
+      </fault>
+    </operation>
+  </binding>
+  <service name="EmpleadoServices">
+    <port name="EmpleadoPort" binding="tns:EmpleadoSOAP11Binding">
+      <soap:address location="http://192.168.0.145:7101/WS_Empleado/EmpleadoPTImpl?WSDL" />
+    </port>
+  </service>
+</definitions>
